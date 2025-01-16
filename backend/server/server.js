@@ -81,6 +81,33 @@ server.get("/type/:type/id/:id", async function (req, res) {
   res.json(results);
 });
 
+server.get("/filter-params", async function (req, res) {
+  const type = req.query.type;
+  let queryParams;
+  if (typeof type === "object") {
+    queryParams = type
+      .map((item, index) => {
+        if (index >= 1) {
+          return `OR type='${item}'`;
+        }
+      })
+      .join(" ");
+    const [results, fields] = await connection.query(
+      `SELECT * FROM bicycle WHERE type = ? ${queryParams}`,
+      [type[0]]
+    );
+    res.json(results);
+    console.log("if");
+  } else {
+    console.log("else");
+    const [results, fields] = await connection.query(
+      `SELECT * FROM bicycle WHERE type = ?`,
+      [type]
+    );
+    res.json(results);
+  }
+});
+
 server.post("/subscribe", async function (req, res) {
   try {
     const { email } = req.body;

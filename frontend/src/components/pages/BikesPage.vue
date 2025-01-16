@@ -63,6 +63,7 @@ const updateData = (localData) => {
   const inStock = bike.filter((elem) => elem.in_stock !== 0)
   const outStock = bike.filter((elem) => elem.in_stock === 0)
   const newBikeData = ref([...inStock, ...outStock])
+  console.log('upadate DAta: '.newBikeData.value)
   return (dataEnd.value = newBikeData.value)
 }
 
@@ -87,7 +88,7 @@ watch(dataAfterSold, (newList) => {
         <SortItem class="sort" :current-data="dataAfterSold" @sorted-data="updateData" />
       </div>
       <section class="section-card">
-        <!-- <FilterBar /> -->
+        <FilterBar @filter-data="updateData" />
         <BikeCard :bike-data="dataEnd" />
       </section>
     </div>
