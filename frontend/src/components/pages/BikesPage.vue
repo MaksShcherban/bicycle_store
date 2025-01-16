@@ -35,11 +35,14 @@ const loadData = () => {
 }
 
 loadData()
+const filterDataReceived = (localData) => {
+  console.log('dataFilter', localData)
+  return (dataAfterSold.value = localData)
+}
 watch(
   () => route.fullPath,
   () => {
     loadData()
-
     watch(data.value, (newData) => {
       if (newData && newData.length > 0) {
         const inStock = newData.filter((elem) => elem.in_stock !== 0)
@@ -63,7 +66,7 @@ const updateData = (localData) => {
   const inStock = bike.filter((elem) => elem.in_stock !== 0)
   const outStock = bike.filter((elem) => elem.in_stock === 0)
   const newBikeData = ref([...inStock, ...outStock])
-  console.log('upadate DAta: '.newBikeData.value)
+  // console.log('upadate DAta: '.newBikeData.value)
   return (dataEnd.value = newBikeData.value)
 }
 
@@ -88,7 +91,7 @@ watch(dataAfterSold, (newList) => {
         <SortItem class="sort" :current-data="dataAfterSold" @sorted-data="updateData" />
       </div>
       <section class="section-card">
-        <FilterBar @filter-data="updateData" />
+        <FilterBar @filter-data-send="filterDataReceived" />
         <BikeCard :bike-data="dataEnd" />
       </section>
     </div>
