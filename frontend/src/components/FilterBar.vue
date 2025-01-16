@@ -7,7 +7,12 @@ const checkboxType = ref([])
 const filteredData = ref([])
 const getURL = () => {
   let url = 'http://localhost:3000/filter-params'
-
+  if (checkboxType.value.length > 0) {
+    const queryParams = checkboxType.value
+      .map((item) => `type=${encodeURIComponent(item)}`)
+      .join('&')
+    url += `?${queryParams}`
+  }
   console.log(url)
   const { data } = useFetch(url)
   filteredData.value = data

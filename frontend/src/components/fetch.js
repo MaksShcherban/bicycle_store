@@ -11,7 +11,7 @@ export function useFetch(url) {
       console.log(data.value)
     } catch (err) {
       error.value = err
-      console.error('Fetch помилка:', err)
+      console.error('Fetch error:', err)
     }
   }
 
