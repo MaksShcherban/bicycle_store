@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import { useFetch } from './fetch'
@@ -26,10 +26,13 @@ const config = {
     }
   }
 }
-
+const carouselList = ref([])
 const url = 'http://localhost:3000/brand'
-const { data } = useFetch(url)
-const carouselList = ref(data)
+
+onMounted(async () => {
+  const { data: fetchedData } = await useFetch(url)
+  carouselList.value = fetchedData
+})
 </script>
 
 <template>

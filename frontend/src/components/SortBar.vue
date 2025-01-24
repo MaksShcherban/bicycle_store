@@ -1,31 +1,7 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 
 const selectSortData = ref('')
-
-const props = defineProps({
-  currentData: Object
-})
-
-const localData = ref([...props.currentData])
-
-const sortList = () => {
-  if (selectSortData.value === 'price-asc') {
-    localData.value.sort((a, b) => a.price - b.price)
-  } else if (selectSortData.value === 'price-desc') {
-    localData.value.sort((a, b) => b.price - a.price)
-  } else if (selectSortData.value === 'name-alphabet') {
-    localData.value.sort((a, b) => (a.brand + a.model).localeCompare(b.brand + b.model))
-  }
-}
-
-watch(
-  () => props.currentData,
-  (newData) => {
-    localData.value = [...newData]
-  },
-  { immediate: true }
-)
 </script>
 
 <template>
@@ -33,8 +9,7 @@ watch(
     <select
       class="sort-data-select my-input"
       v-model="selectSortData"
-      @change="sortList"
-      @change.prevent="$emit('sortedData', localData)"
+      @change.prevent="$emit('sortedData', selectSortData)"
     >
       <option class="sort-data-option" disabled value="">Please, choose option</option>
       <option class="sort-data-option" value="name-alphabet">Name in alphabetical order</option>

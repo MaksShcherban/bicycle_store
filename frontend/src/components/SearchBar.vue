@@ -1,20 +1,6 @@
 <script setup>
-import { ref, computed } from 'vue'
-
-const props = defineProps({
-  bikeData: Object
-})
-
+import { ref } from 'vue'
 const query = ref('')
-
-const queryBikes = computed(() => {
-  return props.bikeData.filter(
-    (item) =>
-      (item.brand.toLowerCase() + ' ' + item.model.toLowerCase()).indexOf(
-        query.value.toLowerCase()
-      ) !== -1
-  )
-})
 </script>
 
 <template>
@@ -22,7 +8,7 @@ const queryBikes = computed(() => {
     <input
       class="search-data-input my-input"
       v-model.trim="query"
-      @input="$emit('searchData', queryBikes)"
+      @input="$emit('queryInputData', query)"
       type="text"
       placeholder="Search bike"
     />
