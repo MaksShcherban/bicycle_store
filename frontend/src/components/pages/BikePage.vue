@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from 'vue-router'
-import { ref, computed } from 'vue'
+import { onBeforeMount, ref, computed } from 'vue'
 import { useFetch } from '../fetch'
 import Header from '@/components/Header.vue'
 import BreadCrumbs from '@/components/BreadCrumbs.vue'
@@ -10,10 +10,14 @@ const route = useRoute()
 const id = route.params.id
 const typeBike = route.params.type
 
+const bikeDetail = ref(null)
+
 const url = `http://localhost:3000/type/${typeBike}/id/${id}`
 
-const { data } = useFetch(url)
-const bikeDetail = ref(data)
+onBeforeMount(async () => {
+  const { data: fetchedData } = await useFetch(url)
+  bikeDetail.value = fetchedData
+})
 
 const uniqueColor = computed(() => {
   return [...new Set(bikeDetail.value.map((item) => item.color))]

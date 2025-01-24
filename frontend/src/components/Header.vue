@@ -66,7 +66,7 @@ const clickHamburger = () => {
   min-height: 110px;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 15;
   &-logo {
     display: flex;
     align-items: center;
@@ -171,7 +171,7 @@ const clickHamburger = () => {
     text-align: center;
     align-items: center;
     transition: 0.3s;
-    z-index: 10;
+    z-index: 11;
     border-radius: 20px;
   }
   .header-body-item {

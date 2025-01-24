@@ -1,5 +1,4 @@
 <script setup>
-// import { ref } from 'vue'
 const props = defineProps({
   bikeData: Array
 })
@@ -209,7 +208,7 @@ const props = defineProps({
   height: 400px;
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1120px) {
   .bike-list {
     grid-template-columns: 1fr 1fr 1fr;
   }
