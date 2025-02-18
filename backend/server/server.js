@@ -59,6 +59,25 @@ server.get("/type/:type/brand/:brand", async function (req, res) {
   );
   res.json(results);
 });
+server.get("/shopping-cart", async function (req, res) {
+  const id = req.query.id;
+  let query = "SELECT * FROM `bicycle`";
+  let queryEnd;
+  if (typeof id === "string") {
+    queryEnd = `${query} WHERE idbike = ${id}`;
+  }
+  if (typeof id === "object") {
+    query = `${query} WHERE `;
+    id.map((item) => {
+      query += `idbike = ${item} OR `;
+    });
+    queryEnd = query.slice(0, -3);
+  }
+  if (id != undefined) {
+    const [results, fields] = await connection.query(queryEnd);
+    res.json(results);
+  }
+});
 
 server.get("/type/:type/id/:id", async function (req, res) {
   const id = req.params.id;
@@ -202,6 +221,45 @@ server.post("/subscribe", async function (req, res) {
   } catch (error) {
     console.error("Database error:", error);
     res.status(500).json({ message: "An error occurred while subscribing" });
+  }
+});
+server.post("/order", async function (req, res) {
+  try {
+    const orderObject = req.body;
+
+    console.log(orderObject);
+    // console.log(orderObject.productID[0]);
+    // console.log(orderObject.name);
+    const queryOrder =
+      "INSERT INTO `order` (id_order, name, surname, email, num_phone, city_post, number_post_office, call_back) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    // console.log(query);
+    const [results1] = await connection.query(queryOrder, [
+      orderObject.orderID,
+      orderObject.name,
+      orderObject.surname,
+      orderObject.email,
+      orderObject.phone,
+      orderObject.city,
+      orderObject.num_post,
+      orderObject.call_back,
+    ]);
+    let paramsQuery = "";
+
+    orderObject.productID.forEach((item) => {
+      paramsQuery += `(${orderObject.orderID}, ${item.idbike}, ${item.count}), `;
+      // console.log(item.idbike);
+    });
+    paramsQuery = paramsQuery.slice(0, -2);
+
+    let queryOrderProduct = `INSERT INTO order_products (id_order, id_product, count) VALUES ${paramsQuery}`;
+    // console.log(queryOrderProduct);
+    // console.log(query);
+    const [results2] = await connection.query(queryOrderProduct);
+
+    res.status(200).json({ message: "Order accepted!" });
+  } catch (error) {
+    console.error("Database error:", error);
+    res.status(500).json({ message: "An error occurred while Order" });
   }
 });
 

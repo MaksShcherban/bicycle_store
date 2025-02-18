@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import Header from '@/components/Header.vue'
 import { useRoute } from 'vue-router'
-import { useFetch } from '../fetch'
+import { useFetch } from '../../utils/fetch'
 import BikeCard from '../BikeCardList.vue'
 import breadCrumbs from '@/components/BreadCrumbs.vue'
 import SortItem from '../SortBar.vue'

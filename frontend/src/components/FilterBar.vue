@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { useFetch } from './fetch'
+import { useFetch } from '../utils/fetch'
 import CustomMinMaxSlider from './CustomMinMaxSlider.vue'
 
 const typeArray = ref([])

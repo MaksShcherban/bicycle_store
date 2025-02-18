@@ -1,5 +1,4 @@
 <!-- eslint-disable vue/multi-word-component-names -->
-
 <template>
   <header class="header">
     <div class="header-logo">
@@ -30,10 +29,10 @@
           </a>
         </li>
         <li class="header-body-item">
-          <a href="#" class="header-body-item-link">
+          <router-link to="/shopping-cart" class="header-body-item-link">
             <img class="header-body-item-image" src="/icon/trash.svg" alt="shopping cart" />
-            <div class="header-body-item-text">0 $</div>
-          </a>
+            <div class="header-body-item-text">{{ numberWithSpaces(store.finalPrice) }} ₴</div>
+          </router-link>
         </li>
       </ul>
     </nav>
@@ -46,11 +45,17 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-
+import { useShoppingStore } from '@/stores/shoppingCart'
+import { numberWithSpaces } from '@/utils/numberWithSpaces'
 const isActive = ref(false)
 const clickHamburger = () => {
   isActive.value = !isActive.value
 }
+
+const store = useShoppingStore()
+// const props = defineProps({
+//   currentFinalPrice: { type: Number, default: 0 }
+// })
 </script>
 <style lang="scss" scoped>
 .header {
