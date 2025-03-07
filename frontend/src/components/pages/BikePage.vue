@@ -1,7 +1,10 @@
 <script setup>
 import { useRoute } from 'vue-router'
 import { onBeforeMount, ref, computed } from 'vue'
-import { useFetch } from '../fetch'
+import { useFetch } from '../../utils/fetch'
+
+import { useShoppingStore } from '@/stores/shoppingCart'
+import { numberWithSpaces } from '@/utils/numberWithSpaces'
 import Header from '@/components/Header.vue'
 import BreadCrumbs from '@/components/BreadCrumbs.vue'
 import FooterInfo from '@/components/FooterInfo.vue'
@@ -25,6 +28,17 @@ const uniqueColor = computed(() => {
 const uniqueFrameSize = computed(() => {
   return [...new Set(bikeDetail.value.map((item) => item.frame_size))]
 })
+
+const store = useShoppingStore()
+
+const uploadShopping = () => {
+  store.getBikeID(Number(id))
+  store.getPrice(bikeDetail.value[0].price)
+}
+
+// const uploadID = () => {
+//   store.getBikeID(Number(id))
+// }
 </script>
 
 <template>
@@ -72,11 +86,13 @@ const uniqueFrameSize = computed(() => {
                   <li class="bike-page-intro-variant">
                     Price: <br />
                     <div class="bike-page-intro-variant-price">
-                      {{ bikeDetail[0].price.toLocaleString('en').replace(/,/g, ' ') }} ₴
+                      {{ numberWithSpaces(bikeDetail[0].price) }} ₴
                     </div>
                   </li>
                 </ul>
-                <button class="bike-page-button-buy bth-buy">Buy</button>
+                <router-link to="/shopping-cart">
+                  <button @click="uploadShopping" class="bike-page-button-buy bth-buy">Buy</button>
+                </router-link>
               </div>
             </div>
           </div>

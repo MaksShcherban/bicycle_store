@@ -150,7 +150,7 @@ const submitForm = async () => {
   margin: 0 auto;
 }
 .footer {
-  margin-top: 100px;
+  // margin-top: 100px;
   color: #f7f7f7;
   background:
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),

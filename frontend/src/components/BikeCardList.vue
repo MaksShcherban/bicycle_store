@@ -1,4 +1,15 @@
 <script setup>
+import { useShoppingStore } from '@/stores/shoppingCart'
+import { numberWithSpaces } from '@/utils/numberWithSpaces'
+const store = useShoppingStore()
+const uploadShopping = (id, price) => {
+  store.getBikeID(id)
+  store.getPrice(price)
+}
+// const uploadID = (id) => {
+//   store.getBikeID(id)
+// }
+
 const props = defineProps({
   bikeData: Array
 })
@@ -6,7 +17,8 @@ const props = defineProps({
 <template>
   <div class="bike">
     <div v-if="props.bikeData.includes(props.bikeData[0])">
-      <ul class="bike-list">
+      <!-- <ul class="bike-list"> -->
+      <transition-group tag="ul" name="fade" class="bike-list">
         <li
           class="bike-item"
           :class="{ disable: item.in_stock === 0 }"
@@ -25,7 +37,7 @@ const props = defineProps({
               <div class="bike-in_stoke in-stock" v-if="item.in_stock === 1">In stock</div>
               <div class="bike-in_stoke out-stock" v-else>Sold out</div>
               <div v-if="item.in_stock === 1" class="bike-subtitle">
-                {{ item.price.toLocaleString('en').replace(/,/g, ' ') }} ₴
+                {{ numberWithSpaces(item.price) }} ₴
               </div>
               <div v-else class="bike-subtitle">0$</div>
             </div>
@@ -48,7 +60,13 @@ const props = defineProps({
               >
             </div>
             <div class="block-bike-hide-buttons">
-              <button class="bth-buy" :disabled="item.in_stock === 0">Buy</button>
+              <button
+                @click="uploadShopping(item.idbike, item.price)"
+                class="bth-buy"
+                :disabled="item.in_stock === 0"
+              >
+                Buy
+              </button>
               <router-link
                 class="block-bike-hide-info"
                 :to="`/type/` + item.type.toLowerCase() + `/id/` + item.idbike"
@@ -58,7 +76,8 @@ const props = defineProps({
             </div>
           </div>
         </li>
-      </ul>
+      </transition-group>
+      <!-- </ul> -->
     </div>
     <div v-else class="empty">Nothing found😢</div>
   </div>
@@ -206,6 +225,25 @@ const props = defineProps({
   align-items: center;
   margin-top: 100px;
   height: 400px;
+}
+
+.fade-move,
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+/* 2. Оголошення входу і виходу зі стану */
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+
+/* 3. Переконайтеся, що елементи, які вилучаються з потоку макету
+      є видалені, щоб анімації були розраховані коректно. */
+.fade-leave-active {
+  position: absolute;
 }
 
 @media (max-width: 1120px) {

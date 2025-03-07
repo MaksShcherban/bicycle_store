@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import 'vue3-carousel/dist/carousel.css'
-import { useFetch } from './fetch'
+import { useFetch } from '../utils/fetch'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 
 const config = {
