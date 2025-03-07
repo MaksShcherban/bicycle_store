@@ -1,29 +1,28 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 export const useShoppingStore = defineStore('shopping', () => {
-  const bikeID = ref([])
-  const finalPrice = ref(0)
+  const bikesCartLocalStorage = JSON.parse(localStorage.getItem('bikesCart') ?? '[]')
+  const finalPriceLocalStorage = JSON.parse(localStorage.getItem('finalPrice') ?? 0)
+  const bikeID = ref(bikesCartLocalStorage)
+  const finalPrice = ref(finalPriceLocalStorage)
   function getBikeID(id) {
     if (bikeID.value.length >= 1) {
       let even = bikeID.value.some((item) => {
-        // console.log('id===')
         return item.id - id === 0
       })
       if (even) {
         bikeID.value.forEach((item) => {
           if (item.id === id) {
             item.count++
-            // console.log('count++')
           }
         })
       } else {
-        // console.log('else count ++')
         bikeID.value.push({ id: id, count: 1 })
       }
     } else {
-      // console.log('else array < 1')
       bikeID.value.push({ id: id, count: 1 })
     }
+    localStorage.setItem('bikesCart', JSON.stringify(bikeID.value))
   }
   function removeBikeAndPrice(id, price) {
     bikeID.value.forEach((item, index) => {
@@ -37,13 +36,17 @@ export const useShoppingStore = defineStore('shopping', () => {
         }
       }
     })
+    localStorage.setItem('bikesCart', JSON.stringify(bikeID.value))
+    localStorage.setItem('finalPrice', JSON.stringify(finalPrice.value))
   }
 
   function getPrice(price) {
     finalPrice.value += price
+    localStorage.setItem('finalPrice', JSON.stringify(finalPrice.value))
   }
   function subtractPrice(price) {
     finalPrice.value -= price
+    localStorage.setItem('finalPrice', JSON.stringify(finalPrice.value))
   }
 
   function countPlus(id) {
@@ -52,6 +55,7 @@ export const useShoppingStore = defineStore('shopping', () => {
         item.count++
       }
     })
+    localStorage.setItem('bikesCart', JSON.stringify(bikeID.value))
   }
   function countMinus(id) {
     bikeID.value.forEach((item) => {
@@ -62,6 +66,7 @@ export const useShoppingStore = defineStore('shopping', () => {
         }
       }
     })
+    localStorage.setItem('bikesCart', JSON.stringify(bikeID.value))
   }
 
   return {

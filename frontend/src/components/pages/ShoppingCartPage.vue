@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import Header from '../Header.vue'
 import FooterInfo from '../FooterInfo.vue'
 import EmptyCartMessage from '../EmptyCartMessage.vue'
@@ -52,6 +52,12 @@ const countPlusPrice = (id, price) => {
   store.countPlus(id)
   store.getPrice(price)
 }
+
+const valueEmptyCart = {
+  paragraph: 'Cart is empty, add to cart any product to it',
+  link: '/',
+  linkText: 'Go shopping!'
+}
 </script>
 <template>
   <div class="container-full">
@@ -60,11 +66,10 @@ const countPlusPrice = (id, price) => {
       <div class="shopping-cart">
         <div class="shopping-cart-title">Shopping Cart</div>
         <div v-if="concatShoppingList.length === 0">
-          <EmptyCartMessage />
+          <EmptyCartMessage :valueEmptyCart="valueEmptyCart" />
         </div>
         <div class="shopping-cart-list-container">
           <ul tag="ul" name="fade" class="shopping-cart-list">
-            <!-- <ul class="shopping-cart-list"> -->
             <li v-for="(bike, index) in concatShoppingList" :key="index" class="shopping-cart-item">
               <router-link :to="`/type/${bike.type}/id/${bike.idbike}`">
                 <div class="shopping-cart-image">
@@ -170,7 +175,6 @@ const countPlusPrice = (id, price) => {
                 </div>
               </div>
             </li>
-            <!-- </ul> -->
           </ul>
         </div>
         <div v-if="concatShoppingList.length != 0" class="shopping-cart-final-price">
@@ -189,9 +193,6 @@ const countPlusPrice = (id, price) => {
             </button>
           </router-link>
         </div>
-
-        <!-- {{ store.bikeID }}
-        {{ concatShoppingList }} -->
       </div>
     </div>
     <FooterInfo />
@@ -207,7 +208,6 @@ const countPlusPrice = (id, price) => {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
 
-    // flex-wrap: wrap;
     justify-items: center;
     gap: 10px;
     &-container {
@@ -261,7 +261,7 @@ const countPlusPrice = (id, price) => {
   &-count {
     display: flex;
     align-items: center;
-    // column-gap: 5px;
+
     &-num {
       display: flex;
       justify-content: center;

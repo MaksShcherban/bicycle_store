@@ -7,12 +7,20 @@ import { useShoppingStore } from '@/stores/shoppingCart'
 import { numberWithSpaces } from '@/utils/numberWithSpaces'
 import { onMounted, ref, Teleport } from 'vue'
 
+onMounted(() => {
+  let currentBikeIDArrayOrder = orderStore.order.map((item) => {
+    return item.idbike
+  })
+  let currentBikeIDArrayShopping = shoppingStore.bikeID.map((item) => {
+    return item.id
+  })
+  if (JSON.stringify(currentBikeIDArrayShopping) !== JSON.stringify(currentBikeIDArrayOrder)) {
+    orderStore.clearOrder()
+  }
+})
+
 const orderStore = useOrderStore()
 const shoppingStore = useShoppingStore()
-
-// onMounted(() => {
-//   console.log('Mounted')
-// })
 
 const valueName = ref('')
 const valueSurname = ref('')
@@ -87,10 +95,17 @@ const submitOrderForm = async () => {
     })
     let result = await response.json()
     teleportTitle = result.message
+    orderStore.clearOrder()
     open.value = true
   } else {
     open.value = true
   }
+}
+
+const valueEmptyCart = {
+  paragraph: 'Go and place an order in the shopping cart ',
+  link: '/shopping-cart',
+  linkText: 'Go to cart!'
 }
 </script>
 
@@ -100,7 +115,7 @@ const submitOrderForm = async () => {
       <Header />
       <div class="container-order">
         <div v-if="orderStore.order.length === 0">
-          <EmptyCartMessage />
+          <EmptyCartMessage :valueEmptyCart="valueEmptyCart" />
         </div>
         <div v-else class="order">
           <div class="order-title">Place your order</div>
@@ -132,7 +147,6 @@ const submitOrderForm = async () => {
                 @blur="removeValueInput"
               />
               <button @click.prevent="changeWindowForm" class="button-form bth-buy">Next</button>
-              <!-- <button @click.prevent="open = true">Відкрити модальне вікно</button> -->
             </form>
             <form v-else class="order-info-form">
               <label for="inp-city">City</label>
@@ -206,7 +220,6 @@ const submitOrderForm = async () => {
   top: 40%;
   left: calc(50% - 150px);
   width: 300px;
-  // margin-left: -150px;
   background-color: $bg-color-header;
 }
 .order {
@@ -226,22 +239,19 @@ const submitOrderForm = async () => {
       font-weight: 700;
     }
     &-list {
-      // max-width: 1000px;
-      // width: 100%;
       margin-inline: 20px;
     }
     &-form {
       display: flex;
       flex-direction: column;
       align-items: normal;
-      // padding-left: 20px;
+
       padding: 20px;
       padding-block: 20px;
       max-width: 300px;
       width: 100%;
 
       & input {
-        // max-width: 200px;
         width: 100%;
         margin-bottom: 10px;
       }
@@ -251,7 +261,7 @@ const submitOrderForm = async () => {
       justify-content: space-between;
       align-items: center;
       column-gap: 50px;
-      // max-width: 800px;
+
       width: 100%;
       box-shadow: $box-shadow;
       border-radius: 20px;
@@ -325,7 +335,7 @@ const submitOrderForm = async () => {
     &-list {
       display: flex;
       flex-direction: column;
-      // justify-content: center;
+
       align-items: center;
     }
     &-block-price {
@@ -335,7 +345,6 @@ const submitOrderForm = async () => {
     &-form {
       max-width: none;
       padding: 20px;
-      // width: 100%;
       & input {
         max-width: none;
       }
@@ -352,8 +361,6 @@ const submitOrderForm = async () => {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     padding-block: 10px;
-    // grid-auto-flow: row dense;
-    // flex-wrap: wrap;
     &-name {
       font-size: 15px;
     }
@@ -372,7 +379,7 @@ const submitOrderForm = async () => {
 @media (max-width: 470px) {
   .order-info-item {
     grid-template-columns: repeat(1, 1fr);
-    // align-items: center;
+
     justify-items: center;
     & img {
       width: 200px;

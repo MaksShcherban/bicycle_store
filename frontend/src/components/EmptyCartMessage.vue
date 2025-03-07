@@ -1,8 +1,12 @@
-<script setup></script>
+<script setup>
+const props = defineProps({
+  valueEmptyCart: Object
+})
+</script>
 <template>
   <div class="empty-cart">
-    <p>Cart is empty, add to cart any product to it</p>
-    <router-link to="/">Go shopping!</router-link>
+    <p>{{ props.valueEmptyCart.paragraph }}</p>
+    <router-link :to="props.valueEmptyCart.link">{{ props.valueEmptyCart.linkText }}</router-link>
   </div>
 </template>
 <style lang="scss">

@@ -228,11 +228,10 @@ server.post("/order", async function (req, res) {
     const orderObject = req.body;
 
     console.log(orderObject);
-    // console.log(orderObject.productID[0]);
-    // console.log(orderObject.name);
+
     const queryOrder =
       "INSERT INTO `order` (id_order, name, surname, email, num_phone, city_post, number_post_office, call_back) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    // console.log(query);
+
     const [results1] = await connection.query(queryOrder, [
       orderObject.orderID,
       orderObject.name,
@@ -247,13 +246,10 @@ server.post("/order", async function (req, res) {
 
     orderObject.productID.forEach((item) => {
       paramsQuery += `(${orderObject.orderID}, ${item.idbike}, ${item.count}), `;
-      // console.log(item.idbike);
     });
     paramsQuery = paramsQuery.slice(0, -2);
 
     let queryOrderProduct = `INSERT INTO order_products (id_order, id_product, count) VALUES ${paramsQuery}`;
-    // console.log(queryOrderProduct);
-    // console.log(query);
     const [results2] = await connection.query(queryOrderProduct);
 
     res.status(200).json({ message: "Order accepted!" });
